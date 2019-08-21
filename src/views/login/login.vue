@@ -43,13 +43,13 @@ export default {
       rules: {
         mobile: [
           { required: true, message: '登录手机号不能为空', trigger: 'blur' },
-          { pattern: /^1[3456789]\d{9}$/, message: '登录手机号格式错误', trigger: 'blur' }
+          { pattern: /^1[3456789]\d{9}$/, message: '登录手机号格式错误' }
 
           // required是必填项，message是提示信息
         ],
         code: [
           { required: true, message: '验证码不能为空', trigger: 'blur' },
-          { pattern: /^\d{6}$/, message: '验证码必须为6位数字', trigger: 'blur' }
+          { pattern: /^\d{6}$/, message: '验证码必须为6位数字' }
         ],
         check: [{
           validator: func // 自定义函数
@@ -62,9 +62,15 @@ export default {
     login () {
       console.log(this.$refs.loginForm)
       // 手动校验表单数据  validate
-      this.$refs.loginForm.validate((isOK) => {
+      this.$refs.loginForm.validate(isOK => {
         if (isOK) {
-          console.log('前端校验成功')
+          this.$axios({
+            method: 'post',
+            url: '/authorizations',
+            data: this.formData// post参数是在data中写入的
+          }).then(result => {
+            console.log(result)
+          })
         }
       })
     }
