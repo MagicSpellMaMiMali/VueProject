@@ -73,6 +73,11 @@ export default {
             window.localStorage.setItem('user-info', JSON.stringify(result.data.data))
             // 编程式导航
             this.$router.push('/home')
+          }).catch(() => {
+            this.$message({
+              message: '当前手机号或验证码错误',
+              type: 'warning'
+            })
           })
         }
       })
