@@ -5,19 +5,19 @@
           <img src="../../assets/images/logo_index.png" alt="">
         </div>
         <!-- 表单结构 -->
-        <el-form>
-          <el-form-item>
-            <el-input placeholder="请输入手机号"></el-input>
+        <el-form :model="formData" :rules="rules" ref="loginForm">
+          <el-form-item prop="mobile">
+            <el-input v-model='formData.mobile' placeholder="请输入手机号"></el-input>
           </el-form-item>
-           <el-form-item>
-            <el-input style="width:70%;float:left" placeholder="请输入验证码" ></el-input>
+           <el-form-item prop="code">
+            <el-input v-model="formData.code" style="width:70%;float:left" placeholder="请输入验证码" ></el-input>
             <el-button style="float:right">发送验证码</el-button>
           </el-form-item>
-          <el-form-item>
-            <el-checkbox style="float:left">我已阅读同意<a class="user">用户协议</a>和<a class="tiao">隐私条款</a></el-checkbox>
+          <el-form-item prop="check">
+            <el-checkbox v-model="formData.check" style="float:left">我已阅读同意<a class="user">用户协议</a>和<a class="tiao">隐私条款</a></el-checkbox>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" style="width:100%">登录</el-button>
+            <el-button @click='login' type="primary" style="width:100%">登录</el-button>
           </el-form-item>
         </el-form>
     </el-card>
@@ -26,7 +26,49 @@
 
 <script>
 export default {
+  data () {
+    var func = function (rule, value, callback) {
+      if (value) {
+        callback()
+      } else {
+        callback(new Error('您必须无条件同意被坑'))
+      }
+    }
+    return {
+      formData: {
+        mobile: '',
+        code: '',
+        check: false
+      },
+      rules: {
+        mobile: [
+          { required: true, message: '登录手机号不能为空', trigger: 'blur' },
+          { pattern: /^1[3456789]\d{9}$/, message: '登录手机号格式错误', trigger: 'blur' }
 
+          // required是必填项，message是提示信息
+        ],
+        code: [
+          { required: true, message: '验证码不能为空', trigger: 'blur' },
+          { pattern: /^\d{6}$/, message: '验证码必须为6位数字', trigger: 'blur' }
+        ],
+        check: [{
+          validator: func // 自定义函数
+        }
+        ]
+      }
+    }
+  },
+  methods: {
+    login () {
+      console.log(this.$refs.loginForm)
+      // 手动校验表单数据  validate
+      this.$refs.loginForm.validate((isOK) => {
+        if (isOK) {
+          console.log('前端校验成功')
+        }
+      })
+    }
+  }
 }
 </script>
 
