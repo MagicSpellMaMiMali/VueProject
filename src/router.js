@@ -1,11 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Home from './views/home'
+import Login from './views/login/login.vue' // 如果文件下的文件只有一个可以省略文件名称，但是多个需要写
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
     {
       path: '/',
       name: 'home',
